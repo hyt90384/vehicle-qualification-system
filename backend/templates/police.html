@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -43,6 +44,7 @@
                 if (data.status === 'allowed') {
                     resultDiv.innerHTML = `
                         <div class="success-message">
+                            <i class="fas fa-check-circle"></i>
                             <h3>允許通行</h3>
                             <p>車主：${data.owner_name}</p>
                             <p>身分證字號：${data.id_number}</p>
@@ -53,6 +55,7 @@
                 } else {
                     resultDiv.innerHTML = `
                         <div class="error-message">
+                            <i class="fas fa-ban"></i>
                             <h3>禁止通行</h3>
                             <p>該車輛未登記或通行證已過期</p>
                         </div>
@@ -63,6 +66,7 @@
                 console.error('Error:', error);
                 resultDiv.innerHTML = `
                     <div class="error-message">
+                        <i class="fas fa-exclamation-circle"></i>
                         <h3>發生錯誤</h3>
                         <p>請稍後再試</p>
                     </div>
@@ -121,27 +125,49 @@
             padding: 20px;
             border-radius: 8px;
             display: none;
+            text-align: center;
         }
         
         .result-box.success {
             display: block;
             background-color: #e8f5e9;
             color: #2e7d32;
+            border: 2px solid #2e7d32;
         }
         
         .result-box.error {
             display: block;
             background-color: #ffebee;
             color: #c62828;
+            border: 2px solid #c62828;
         }
         
-        .success-message, .error-message {
+        .success-message {
+            color: #2e7d32;
+            text-align: center;
+        }
+        
+        .error-message {
+            color: #c62828 !important;
             text-align: center;
         }
         
         .success-message h3, .error-message h3 {
             margin-top: 0;
             font-size: 1.5em;
+        }
+
+        .success-message i, .error-message i {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .success-message i {
+            color: #2e7d32;
+        }
+
+        .error-message i {
+            color: #c62828;
         }
     </style>
 </body>

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Date, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, Date, DateTime, Index
 from sqlalchemy.ext.declarative import declarative_base
 from backend.database import get_query_property
 
@@ -24,5 +24,13 @@ class QueryRecord(Base):
     
     id = Column(Integer, primary_key=True)
     license_plate = Column(String(10), nullable=False)
-    timestamp = Column(DateTime, nullable=False)
+    timestamp = Column(DateTime, nullable=False, index=True)
     status = Column(String(20), nullable=False)  # 'allowed' or 'forbidden'
+
+    # 添加查詢介面
+    query = get_query_property()
+
+    # 添加索引
+    __table_args__ = (
+        Index('idx_timestamp_desc', timestamp.desc()),
+    )
