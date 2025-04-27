@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>監理人員入口 - 車輛資格系統</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">車輛資格系統</a>
+            <div class="navbar-menu">
+                <a href="/" class="navbar-item">首頁</a>
+                <a href="/dmv" class="navbar-item active">監理人員入口</a>
+                <a href="/police" class="navbar-item">警察入口</a>
+                <a href="/manage" class="navbar-item">管理車輛</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>監理人員 - 車輛資格系統</h1>
+        
+        <div class="function-selection">
+            <div class="function-card">
+                <h2>新增孕婦車輛</h2>
+                <p>新增孕婦車輛資料</p>
+                <a href="/dmv/add" class="function-button">進入系統</a>
+            </div>
+            
+            <div class="function-card">
+                <h2>管理孕婦車輛</h2>
+                <p>編輯或更新孕婦車輛資料</p>
+                <a href="/dmv/manage" class="function-button">進入系統</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .function-selection {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .function-card {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .function-card h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .function-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .function-button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .function-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</body>
+</html> 

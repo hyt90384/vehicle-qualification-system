@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>查詢結果 - 監理人員</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">車輛資格系統</a>
+            <div class="navbar-menu">
+                <a href="/" class="navbar-item">首頁</a>
+                <a href="/dmv" class="navbar-item active">監理人員入口</a>
+                <a href="/police" class="navbar-item">警察入口</a>
+                <a href="/manage" class="navbar-item">管理車輛</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>查詢結果</h1>
+        
+        <div class="result-card">
+            {% if status == 'allowed' %}
+                <div class="result-header success">
+                    <h2>允許通行</h2>
+                </div>
+                <div class="result-content">
+                    <div class="result-item">
+                        <label>車牌號碼：</label>
+                        <span>{{ vehicle.license_plate }}</span>
+                    </div>
+                    <div class="result-item">
+                        <label>車主姓名：</label>
+                        <span>{{ vehicle.owner_name }}</span>
+                    </div>
+                    <div class="result-item">
+                        <label>身分證字號：</label>
+                        <span>{{ vehicle.id_number }}</span>
+                    </div>
+                    <div class="result-item">
+                        <label>懷孕時間：</label>
+                        <span>{{ vehicle.pregnancy_date.strftime('%Y-%m-%d') }}</span>
+                    </div>
+                    <div class="result-item">
+                        <label>通行證類型：</label>
+                        <span>{{ vehicle.maternity_pass_type }}</span>
+                    </div>
+                    <div class="result-item">
+                        <label>到期日期：</label>
+                        <span>{{ vehicle.maternity_pass_expiry.strftime('%Y-%m-%d') if vehicle.maternity_pass_expiry else '無' }}</span>
+                    </div>
+                </div>
+            {% else %}
+                <div class="result-header error">
+                    <h2>禁止通行</h2>
+                </div>
+                <div class="result-content">
+                    <div class="result-item">
+                        <label>車牌號碼：</label>
+                        <span>{{ license_plate }}</span>
+                    </div>
+                    <div class="result-message">
+                        該車輛未登記或通行證已過期
+                    </div>
+                </div>
+            {% endif %}
+            
+            <div class="result-actions">
+                <a href="/dmv" class="button">返回</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .result-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .result-header {
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .result-header.success {
+            background-color: #4CAF50;
+        }
+        
+        .result-header.error {
+            background-color: #f44336;
+        }
+        
+        .result-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        
+        .result-content {
+            padding: 20px;
+        }
+        
+        .result-item {
+            margin-bottom: 15px;
+        }
+        
+        .result-item label {
+            display: inline-block;
+            width: 100px;
+            color: #666;
+        }
+        
+        .result-item span {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .result-message {
+            text-align: center;
+            color: #666;
+            margin: 20px 0;
+        }
+        
+        .result-actions {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</body>
+</html> 

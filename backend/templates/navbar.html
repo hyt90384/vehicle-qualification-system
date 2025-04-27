@@ -1,0 +1,10 @@
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="/" class="navbar-brand">車輛資格系統</a>
+        <div class="navbar-menu">
+            <a href="/" class="navbar-item {% if request.endpoint == 'index' %}active{% endif %}">首頁</a>
+            <a href="/dmv" class="navbar-item {% if request.endpoint.startswith('dmv') %}active{% endif %}">監理人員入口</a>
+            <a href="/police" class="navbar-item {% if request.endpoint == 'police' %}active{% endif %}">警察入口</a>
+        </div>
+    </div>
+</nav> 

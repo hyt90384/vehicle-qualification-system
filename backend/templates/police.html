@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>警察 - 車輛資格系統</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="container">
+        <h1>警察 - 車輛資格檢查</h1>
+        
+        <div class="form-group">
+            <label for="plate">車牌號碼：</label>
+            <div class="input-group">
+                <input type="text" id="plate" placeholder="請輸入車牌號碼" required pattern="[A-Z]{2,3}\d{4}" title="請輸入正確的車牌格式（2-3個英文字母 + 4個數字）">
+                <button type="button" id="checkButton">檢查</button>
+            </div>
+        </div>
+
+        <div id="result" class="result-box"></div>
+    </div>
+
+    <script>
+        const plateInput = document.getElementById('plate');
+        const checkButton = document.getElementById('checkButton');
+        const resultDiv = document.getElementById('result');
+
+        // 檢查車牌
+        async function checkPlate(plate) {
+            try {
+                const response = await fetch('/api/check_plate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ plate })
+                });
+                const data = await response.json();
+                
+                if (data.status === 'allowed') {
+                    resultDiv.innerHTML = `
+                        <div class="success-message">
+                            <h3>允許通行</h3>
+                            <p>車主：${data.owner_name}</p>
+                            <p>身分證字號：${data.id_number}</p>
+                            <p>懷孕時間：${data.pregnancy_date}</p>
+                        </div>
+                    `;
+                    resultDiv.className = 'result-box success';
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error-message">
+                            <h3>禁止通行</h3>
+                            <p>該車輛未登記或通行證已過期</p>
+                        </div>
+                    `;
+                    resultDiv.className = 'result-box error';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="error-message">
+                        <h3>發生錯誤</h3>
+                        <p>請稍後再試</p>
+                    </div>
+                `;
+                resultDiv.className = 'result-box error';
+            }
+        }
+
+        // 手動輸入檢查
+        checkButton.addEventListener('click', function() {
+            const plate = plateInput.value;
+            if (plate.length >= 6) {
+                checkPlate(plate);
+            }
+        });
+
+        // 按下 Enter 鍵時檢查
+        plateInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const plate = this.value;
+                if (plate.length >= 6) {
+                    checkPlate(plate);
+                }
+            }
+        });
+    </script>
+
+    <style>
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .input-group button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .input-group button:hover {
+            background-color: #45a049;
+        }
+        
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .result-box.success {
+            display: block;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .result-box.error {
+            display: block;
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .success-message, .error-message {
+            text-align: center;
+        }
+        
+        .success-message h3, .error-message h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+    </style>
+</body>
+</html> 

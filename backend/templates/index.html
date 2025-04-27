@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>車輛資格系統</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="container">
+        <h1>歡迎使用車輛資格系統</h1>
+        
+        <div class="role-selection">
+            <div class="role-card">
+                <h2>監理人員</h2>
+                <p>管理孕婦車輛資料</p>
+                <a href="/dmv" class="role-button">進入系統</a>
+            </div>
+            
+            <div class="role-card">
+                <h2>警察</h2>
+                <p>檢查車輛通行資格</p>
+                <a href="/police" class="role-button">進入系統</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .role-selection {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .role-card {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .role-card h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .role-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .role-button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .role-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</body>
+</html> 

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>監理人員 - 孕婦車輛管理</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">車輛資格系統</a>
+            <div class="navbar-menu">
+                <a href="/" class="navbar-item">首頁</a>
+                <a href="/dmv" class="navbar-item active">監理人員入口</a>
+                <a href="/police" class="navbar-item">警察入口</a>
+                <a href="/manage" class="navbar-item">管理車輛</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>監理人員 - 孕婦車輛管理</h1>
+        
+        <div class="search-section">
+            <h2>查詢車輛</h2>
+            <form id="search-form" onsubmit="searchVehicles(event)">
+                <div class="form-group">
+                    <label for="license_plate">車牌號碼：</label>
+                    <input type="text" id="license_plate" name="license_plate">
+                </div>
+                <div class="form-group">
+                    <label for="id_number">身分證字號：</label>
+                    <input type="text" id="id_number" name="id_number" pattern="[A-Z][12]\d{8}" title="請輸入正確的身分證字號格式">
+                </div>
+                <div class="form-group">
+                    <label for="owner_name">車主姓名：</label>
+                    <input type="text" id="owner_name" name="owner_name">
+                </div>
+                <button type="submit">查詢</button>
+                <button type="button" onclick="clearSearch()">清除</button>
+            </form>
+        </div>
+
+        <div id="search-results" class="search-results" style="display: none;">
+            <div class="results-header">
+                <h2>查詢結果</h2>
+                <button onclick="showAddForm()" class="action-button">新增車輛</button>
+            </div>
+            <div class="results-list">
+                <!-- 查詢結果將在這裡動態顯示 -->
+            </div>
+        </div>
+
+        <div id="add-form" class="edit-form" style="display: none;">
+            <h2>新增車輛</h2>
+            <form id="add-vehicle-form" onsubmit="addVehicle(event)">
+                <div class="form-group">
+                    <label for="add_id_number">身分證字號：</label>
+                    <input type="text" id="add_id_number" name="id_number" required pattern="[A-Z][12]\d{8}" title="請輸入正確的身分證字號格式">
+                </div>
+                <div class="form-group">
+                    <label for="add_license_plate">車牌號碼：</label>
+                    <input type="text" id="add_license_plate" name="license_plate" required>
+                </div>
+                <div class="form-group">
+                    <label for="add_owner_name">車主姓名：</label>
+                    <input type="text" id="add_owner_name" name="owner_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="add_pregnancy_date">懷孕時間：</label>
+                    <input type="date" id="add_pregnancy_date" name="pregnancy_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="add_maternity_pass_type">通行證類型：</label>
+                    <select id="add_maternity_pass_type" name="maternity_pass_type">
+                        <option value="A">A類</option>
+                        <option value="B">B類</option>
+                        <option value="C">C類</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="add_maternity_pass_expiry">到期日期：</label>
+                    <input type="date" id="add_maternity_pass_expiry" name="maternity_pass_expiry">
+                </div>
+                <input type="hidden" name="has_maternity_pass" value="on">
+                <button type="submit">新增</button>
+                <button type="button" onclick="backToSearch()">返回查詢</button>
+            </form>
+        </div>
+
+        <div id="edit-form" class="edit-form" style="display: none;">
+            <h2>編輯車輛資料</h2>
+            <form id="vehicle-form" onsubmit="updateVehicle(event)">
+                <input type="hidden" id="vehicle-id" name="vehicle_id">
+                <div class="form-group">
+                    <label for="edit_id_number">身分證字號：</label>
+                    <input type="text" id="edit_id_number" name="id_number" required pattern="[A-Z][12]\d{8}" title="請輸入正確的身分證字號格式">
+                </div>
+                <div class="form-group">
+                    <label for="edit_license_plate">車牌號碼：</label>
+                    <input type="text" id="edit_license_plate" name="license_plate" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit_owner_name">車主姓名：</label>
+                    <input type="text" id="edit_owner_name" name="owner_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit_pregnancy_date">懷孕時間：</label>
+                    <input type="date" id="edit_pregnancy_date" name="pregnancy_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit_maternity_pass_type">通行證類型：</label>
+                    <select id="edit_maternity_pass_type" name="maternity_pass_type">
+                        <option value="A">A類</option>
+                        <option value="B">B類</option>
+                        <option value="C">C類</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit_maternity_pass_expiry">到期日期：</label>
+                    <input type="date" id="edit_maternity_pass_expiry" name="maternity_pass_expiry">
+                </div>
+                <input type="hidden" name="has_maternity_pass" value="on">
+                <button type="submit">更新</button>
+                <button type="button" onclick="backToSearch()">返回查詢</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 顯示新增表單
+        function showAddForm() {
+            document.getElementById('add-form').style.display = 'block';
+            document.getElementById('search-results').style.display = 'none';
+            document.getElementById('edit-form').style.display = 'none';
+        }
+
+        // 新增車輛
+        function addVehicle(event) {
+            event.preventDefault();
+            const form = document.getElementById('add-vehicle-form');
+            const formData = new FormData(form);
+
+            fetch('/add_vehicle', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                // 顯示新增成功訊息
+                const successMessage = document.createElement('div');
+                successMessage.className = 'success-message';
+                successMessage.textContent = '新增成功！';
+                document.querySelector('.add-form').insertBefore(successMessage, form);
+
+                // 3秒後移除成功訊息並重新查詢
+                setTimeout(() => {
+                    successMessage.remove();
+                    form.reset();
+                    backToSearch();
+                    document.getElementById('search-form').dispatchEvent(new Event('submit'));
+                }, 3000);
+            })
+            .catch(error => {
+                alert('新增失敗，請稍後再試');
+            });
+        }
+
+        // 查詢車輛
+        function searchVehicles(event) {
+            event.preventDefault();
+            const licensePlate = document.getElementById('license_plate').value;
+            const idNumber = document.getElementById('id_number').value;
+            const ownerName = document.getElementById('owner_name').value;
+
+            fetch(`/api/search_vehicles?license_plate=${licensePlate}&id_number=${idNumber}&owner_name=${ownerName}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsList = document.querySelector('.results-list');
+                    resultsList.innerHTML = '';
+                    
+                    if (data.length === 0) {
+                        resultsList.innerHTML = '<p>找不到符合條件的車輛</p>';
+                    } else {
+                        data.forEach(vehicle => {
+                            const div = document.createElement('div');
+                            div.className = 'result-item';
+                            div.innerHTML = `
+                                <p>車牌號碼：${vehicle.license_plate}</p>
+                                <p>車主姓名：${vehicle.owner_name}</p>
+                                <p>身分證字號：${vehicle.id_number}</p>
+                                <div class="result-actions">
+                                    <button onclick="loadVehicleData(${vehicle.id})">編輯</button>
+                                    <button onclick="deleteVehicle(${vehicle.id})" class="delete-button">刪除</button>
+                                </div>
+                            `;
+                            resultsList.appendChild(div);
+                        });
+                    }
+                    
+                    document.getElementById('search-results').style.display = 'block';
+                    document.getElementById('edit-form').style.display = 'none';
+                });
+        }
+
+        // 刪除車輛
+        function deleteVehicle(vehicleId) {
+            if (!confirm('確定要刪除這筆資料嗎？')) {
+                return;
+            }
+
+            fetch(`/api/delete_vehicle/${vehicleId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                // 顯示刪除成功訊息
+                const successMessage = document.createElement('div');
+                successMessage.className = 'success-message';
+                successMessage.textContent = '刪除成功！';
+                document.querySelector('.search-results').insertBefore(successMessage, document.querySelector('.results-list'));
+
+                // 3秒後移除成功訊息並重新查詢
+                setTimeout(() => {
+                    successMessage.remove();
+                    document.getElementById('search-form').dispatchEvent(new Event('submit'));
+                }, 3000);
+            })
+            .catch(error => {
+                alert('刪除失敗，請稍後再試');
+            });
+        }
+
+        // 清除查詢
+        function clearSearch() {
+            document.getElementById('search-form').reset();
+            document.getElementById('search-results').style.display = 'none';
+            document.getElementById('edit-form').style.display = 'none';
+        }
+
+        // 載入車輛資料
+        function loadVehicleData(vehicleId) {
+            fetch(`/api/vehicle/${vehicleId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('vehicle-id').value = data.id;
+                    document.getElementById('edit_id_number').value = data.id_number;
+                    document.getElementById('edit_license_plate').value = data.license_plate;
+                    document.getElementById('edit_owner_name').value = data.owner_name;
+                    document.getElementById('edit_pregnancy_date').value = data.pregnancy_date;
+                    document.getElementById('edit_maternity_pass_type').value = data.maternity_pass_type;
+                    document.getElementById('edit_maternity_pass_expiry').value = data.maternity_pass_expiry || '';
+                    
+                    document.getElementById('search-results').style.display = 'none';
+                    document.getElementById('edit-form').style.display = 'block';
+                });
+        }
+
+        // 更新車輛資料
+        function updateVehicle(event) {
+            event.preventDefault();
+            const form = document.getElementById('vehicle-form');
+            const formData = new FormData(form);
+
+            fetch('/update_vehicle', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                // 顯示更新成功訊息
+                const successMessage = document.createElement('div');
+                successMessage.className = 'success-message';
+                successMessage.textContent = '資料更新成功！';
+                document.querySelector('.edit-form').insertBefore(successMessage, form);
+
+                // 3秒後移除成功訊息並重新查詢
+                setTimeout(() => {
+                    successMessage.remove();
+                    backToSearch();
+                    document.getElementById('search-form').dispatchEvent(new Event('submit'));
+                }, 3000);
+            })
+            .catch(error => {
+                alert('更新失敗，請稍後再試');
+            });
+        }
+
+        // 返回查詢
+        function backToSearch() {
+            document.getElementById('search-results').style.display = 'block';
+            document.getElementById('edit-form').style.display = 'none';
+            document.getElementById('add-form').style.display = 'none';
+        }
+    </script>
+
+    <style>
+        .search-section {
+            margin-bottom: 30px;
+        }
+        
+        .search-results {
+            margin-top: 20px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .result-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-item p {
+            margin: 5px 0;
+        }
+        
+        .result-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .action-button:hover {
+            background-color: #45a049;
+        }
+
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #da190b;
+        }
+        
+        .edit-form {
+            margin-top: 30px;
+        }
+
+        .success-message {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
+</body>
+</html> 

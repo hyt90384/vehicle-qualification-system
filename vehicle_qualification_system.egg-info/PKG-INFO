@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: vehicle-qualification-system
+Version: 0.1
+Requires-Dist: flask
+Requires-Dist: sqlalchemy
+Requires-Dist: easyocr
+Requires-Dist: alembic
+Dynamic: requires-dist

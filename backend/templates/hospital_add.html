@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>新增孕婦車輛 - 監理人員</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">車輛資格系統</a>
+            <div class="navbar-menu">
+                <a href="/" class="navbar-item">首頁</a>
+                <a href="/dmv" class="navbar-item active">監理人員入口</a>
+                <a href="/police" class="navbar-item">警察入口</a>
+                <a href="/manage" class="navbar-item">管理車輛</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>新增孕婦車輛（監理人員）</h1>
+        
+        <form action="/add_vehicle" method="POST">
+            <div class="form-group">
+                <label for="id_number">身分證字號：</label>
+                <input type="text" id="id_number" name="id_number" required pattern="[A-Z][12]\d{8}" title="請輸入正確的身分證字號格式">
+            </div>
+            <div class="form-group">
+                <label for="license_plate">車牌號碼：</label>
+                <input type="text" id="license_plate" name="license_plate" required>
+            </div>
+            <div class="form-group">
+                <label for="owner_name">車主姓名：</label>
+                <input type="text" id="owner_name" name="owner_name" required>
+            </div>
+            <div class="form-group">
+                <label for="pregnancy_date">懷孕時間：</label>
+                <input type="date" id="pregnancy_date" name="pregnancy_date" required>
+            </div>
+            <div class="form-group">
+                <label for="maternity_pass_type">通行證類型：</label>
+                <select id="maternity_pass_type" name="maternity_pass_type">
+                    <option value="A">A類</option>
+                    <option value="B">B類</option>
+                    <option value="C">C類</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="maternity_pass_expiry">到期日期：</label>
+                <input type="date" id="maternity_pass_expiry" name="maternity_pass_expiry">
+            </div>
+            <input type="hidden" name="has_maternity_pass" value="on">
+            <button type="submit">新增</button>
+            <a href="/dmv" class="button">返回</a>
+        </form>
+    </div>
+
+    <script>
+        // 自動計算到期日期（預設為懷孕時間後 9 個月）
+        document.getElementById('pregnancy_date').addEventListener('change', function() {
+            const pregnancyDate = new Date(this.value);
+            const expiryDate = new Date(pregnancyDate);
+            expiryDate.setMonth(expiryDate.getMonth() + 9);
+            document.getElementById('maternity_pass_expiry').value = expiryDate.toISOString().split('T')[0];
+        });
+    </script>
+</body>
+</html> 

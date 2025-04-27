@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>車牌管理</title>
+</head>
+<body>
+    <h1>車牌管理</h1>
+    <form action="/add_vehicle" method="post">
+        <input type="text" name="license_plate" placeholder="車牌號碼" required>
+        <input type="text" name="owner_name" placeholder="車主姓名">
+        <label>
+            <input type="checkbox" name="has_maternity_pass"> 婦幼資格
+        </label>
+        <input type="text" name="maternity_pass_type" placeholder="證照類型">
+        <input type="date" name="maternity_pass_expiry" placeholder="到期日">
+        <button type="submit">新增車牌</button>
+    </form>
+
+    <h2>目前車牌清單</h2>
+    <ul>
+        {% for v in vehicles %}
+        <li>
+            {{ v.license_plate }} - {{ v.owner_name }} - {{ '有資格' if v.has_maternity_pass else '無資格' }}
+            <a href="/delete_vehicle/{{ v.id }}">🗑 刪除</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="/">🔙 回首頁</a>
+</body>
+</html>
